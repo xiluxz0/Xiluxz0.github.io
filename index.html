@@ -88,17 +88,21 @@
     }
 
     #iframe-container {
-      flex: 1;
+      position: fixed; /* Changed from flex to fixed positioning */
+      top: 0;
+      left: 0;
       width: 100%;
+      height: 100%;
       transition: opacity 0.5s ease-in-out;
       opacity: 0;
-      margin: 10px;
-      border-radius: 8px;
+      border-radius: 0; /* Removed rounded corners */
       overflow: hidden;
       display: none;
       z-index: 1;
+      margin: 0; /* Removed margin */
+      border: none; /* Ensure no borders */
     }
-
+    
     body.tabs-hidden #iframe-container {
       display: block;
       opacity: 1;
