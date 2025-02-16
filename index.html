@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tabbed Iframe Example</title>
+  <title>Google</title>
+  <!-- Link to Google favicon -->
+  <link rel="icon" href="https://www.google.com/favicon.ico" type="image/x-icon">
+  <!-- Link to Google Fonts for Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* Global Styles */
     body {
@@ -81,6 +85,8 @@
       font-size: 16px;
       max-width: 600px; /* Limit width for better readability */
       z-index: 1; /* Ensure paragraph is above the pseudo-element */
+      transition: opacity 0.5s ease-in-out; /* Smooth fade effect */
+      opacity: 1; /* Fully visible initially */
     }
 
     #static-paragraph p {
@@ -125,6 +131,7 @@
     const iframeContainer = document.getElementById('iframe-container');
     const tabsContainer = document.querySelector('.tabs'); // Reference to the tabs container
     const body = document.body; // Reference to the body element
+    const staticParagraph = document.getElementById('static-paragraph'); // Reference to the paragraph
 
     // URLs for each tab's content
     const urls = {
@@ -154,11 +161,18 @@
       }, 300); // 300ms delay for the fade effect
     }
 
-    // Function to fade out and hide the tabs
-    function hideTabs() {
-      tabsContainer.style.opacity = "0"; // Fade out the tabs
+    // Function to fade out and hide the paragraph and tabs
+    function hideElements() {
+      // Fade out the static paragraph
+      staticParagraph.style.opacity = "0";
+
+      // Fade out the tabs
+      tabsContainer.style.opacity = "0";
+
       setTimeout(() => {
-        tabsContainer.style.display = "none"; // Hide the tabs after fading
+        // Hide the tabs and paragraph after the fade effect
+        tabsContainer.style.display = "none"; 
+        staticParagraph.style.display = "none"; 
         iframeContainer.style.display = "block"; // Show the iframe container
       }, 500); // Match this duration with the CSS transition duration
     }
@@ -180,8 +194,8 @@
         body.classList.add('rammerhead'); // Hide the gradient (RammerHead)
       }
 
-      // Hide the tabs after switching
-      hideTabs();
+      // Hide the paragraph and tabs after switching
+      hideElements();
     }
 
     // Add event listeners for tab clicks
