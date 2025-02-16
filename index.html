@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabbed Iframe Example</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center content horizontally */
+      justify-content: center; /* Center content vertically */
+      position: relative; /* Required for pseudo-element positioning */
+      overflow: hidden; /* Prevent scrolling */
+      background: #F2ECE6; /* Default solid background (RammerHead) */
+    }
+
+    /* Pseudo-element for the gradient background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #6a0dad, #8a2be2); /* UltraViolet gradient */
+      z-index: -1; /* Place it behind the content */
+      opacity: 1; /* Start fully visible */
+      transition: opacity 0.5s ease-in-out; /* Smooth transition for opacity */
+    }
+
+    /* When the body has the 'rammerhead' class, hide the gradient */
+    body.rammerhead::before {
+      opacity: 0; /* Fade out the gradient */
+    }
+
+    /* Tab header container */
+    .tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      transition: opacity 0.5s ease-in-out; /* Add transition for opacity */
+      z-index: 1; /* Ensure tabs are above the pseudo-element */
+    }
+
+    /* Style for each tab */
+    .tab {
+      flex: 1;
+      padding: 20px 40px; /* Larger padding for bigger buttons */
+      text-align: center;
+      cursor: pointer;
+      font-size: 24px; /* Larger font size */
+      color: #fff; /* White text for better contrast */
+      transition: background-color 0.3s ease, border 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3); /* Frame (border) for the buttons */
+      border-radius: 8px;
+      margin: 0 10px; /* Add spacing between tabs */
+    }
+
+    .tab:hover {
+      background-color: rgba(255, 255, 255, 0.2); /* Light hover effect */
+    }
+
+    .tab.active {
+      border: 2px solid #fff; /* White border for active tab */
+      font-weight: 600;
+      background-color: rgba(255, 255, 255, 0.1); /* Slightly darker background for active tab */
+    }
+
+    /* Static paragraph */
+    #static-paragraph {
+      margin: 20px;
+      text-align: center;
+      color: #fff; /* White text for better contrast */
+      font-size: 16px;
+      max-width: 600px; /* Limit width for better readability */
+      z-index: 1; /* Ensure paragraph is above the pseudo-element */
+    }
+
+    #static-paragraph p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8); /* Slightly transparent text */
+    }
+
+    /* Iframe container takes up the rest of the screen */
+    #iframe-container {
+      flex: 1;
+      width: 100%;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0; /* Start hidden */
+      margin: 10px;
+      border-radius: 8px;
+      overflow: hidden; /* Ensure iframe doesn't overflow */
+      display: none; /* Initially hidden */
+      z-index: 1; /* Ensure iframe is above the pseudo-element */
+    }
+
+    /* Show iframe container when tabs are hidden */
+    body.tabs-hidden #iframe-container {
+      display: block;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="tabs">
+    <div id="ultraviolet-tab" class="tab">UltraViolet</div>
+    <div id="rammerhead-tab" class="tab">RammerHead</div>
+  </div>
+  <div id="iframe-container"></div>
+  <div id="static-paragraph">
+    <p>Select a tab to load the corresponding content.</p>
+  </div>
+
+  <script>
+    // Get tab elements and the iframe container
+    const ultravioletTab = document.getElementById('ultraviolet-tab');
+    const rammerheadTab = document.getElementById('rammerhead-tab'); // Updated ID
+    const iframeContainer = document.getElementById('iframe-container');
+    const tabsContainer = document.querySelector('.tabs'); // Reference to the tabs container
+    const body = document.body; // Reference to the body element
+
+    // URLs for each tab's content
+    const urls = {
+      ultraviolet: "https://zentkhub-7e9aed.koyeb.app",
+      rammerhead: "https://onthe.wildsurf.net" // Updated key
+    };
+
+    // Function to load the iframe with a fade effect
+    function loadIframe(url) {
+      // Fade out the iframe container
+      iframeContainer.style.opacity = "0";
+
+      setTimeout(() => {
+        // Create a new iframe element
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
+
+        // Replace any existing content and add the new iframe
+        iframeContainer.innerHTML = "";
+        iframeContainer.appendChild(iframe);
+
+        // Fade the container back in
+        iframeContainer.style.opacity = "1";
+      }, 300); // 300ms delay for the fade effect
+    }
+
+    // Function to fade out and hide the tabs
+    function hideTabs() {
+      tabsContainer.style.opacity = "0"; // Fade out the tabs
+      setTimeout(() => {
+        tabsContainer.style.display = "none"; // Hide the tabs after fading
+        iframeContainer.style.display = "block"; // Show the iframe container
+      }, 500); // Match this duration with the CSS transition duration
+    }
+
+    // Function to switch tabs
+    function switchTab(selected) {
+      // Remove the 'active' class from both tabs
+      ultravioletTab.classList.remove('active');
+      rammerheadTab.classList.remove('active');
+
+      // Add the 'active' class to the selected tab
+      if (selected === 'ultraviolet') {
+        ultravioletTab.classList.add('active');
+        loadIframe(urls.ultraviolet);
+        body.classList.remove('rammerhead'); // Show the gradient (UltraViolet)
+      } else if (selected === 'rammerhead') { // Updated key
+        rammerheadTab.classList.add('active');
+        loadIframe(urls.rammerhead);
+        body.classList.add('rammerhead'); // Hide the gradient (RammerHead)
+      }
+
+      // Hide the tabs after switching
+      hideTabs();
+    }
+
+    // Add event listeners for tab clicks
+    ultravioletTab.addEventListener('click', () => switchTab('ultraviolet'));
+    rammerheadTab.addEventListener('click', () => switchTab('rammerhead')); // Updated ID
+
+    // Ensure no tab is highlighted by default on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      ultravioletTab.classList.remove('active');
+      rammerheadTab.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
