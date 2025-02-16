@@ -109,7 +109,7 @@
   <div class="tabs">
     <div id="ultraviolet-tab" class="tab">UltraViolet</div>
     <div id="rammerhead-tab" class="tab">RammerHead</div>
-    <div id="atf-tab" class="tab">ATF Classroom</div>
+    <div id="emerald-tab" class="tab">Emerald</div>
   </div>
   <div id="iframe-container"></div>
   <div id="static-paragraph">
@@ -120,17 +120,17 @@
     // Get elements
     const ultravioletTab = document.getElementById('ultraviolet-tab');
     const rammerheadTab = document.getElementById('rammerhead-tab');
-    const atfTab = document.getElementById('atf-tab');
+    const emeraldTab = document.getElementById('emerald-tab');
     const iframeContainer = document.getElementById('iframe-container');
     const tabsContainer = document.querySelector('.tabs');
     const body = document.body;
     const staticParagraph = document.getElementById('static-paragraph');
 
-    // Updated URLs with ATF Classroom
+    // Updated URLs with Emerald
     const urls = {
       ultraviolet: "https://zentkhub-7e9aed.koyeb.app",
       rammerhead: "https://onthe.wildsurf.net",
-      atf: "https://class.atf.com.np"
+      emerald: "https://class.atf.com.np"
     };
 
     // Existing loadIframe and hideElements functions remain unchanged
@@ -161,7 +161,7 @@
     // Updated switchTab function
     function switchTab(selected) {
       // Reset all tabs
-      [ultravioletTab, rammerheadTab, atfTab].forEach(tab => tab.classList.remove('active'));
+      [ultravioletTab, rammerheadTab, emeraldTab].forEach(tab => tab.classList.remove('active'));
 
       // Set active tab and load content
       if (selected === 'ultraviolet') {
@@ -172,9 +172,9 @@
         rammerheadTab.classList.add('active');
         loadIframe(urls.rammerhead);
         body.classList.add('rammerhead');
-      } else if (selected === 'atf') {
-        atfTab.classList.add('active');
-        loadIframe(urls.atf);
+      } else if (selected === 'emerald') {
+        emeraldTab.classList.add('active');
+        loadIframe(urls.emerald);
         body.classList.remove('rammerhead');
       }
 
@@ -184,11 +184,11 @@
     // Add event listeners for all tabs
     ultravioletTab.addEventListener('click', () => switchTab('ultraviolet'));
     rammerheadTab.addEventListener('click', () => switchTab('rammerhead'));
-    atfTab.addEventListener('click', () => switchTab('atf'));
+    emeraldTab.addEventListener('click', () => switchTab('emerald'));
 
     // Initialize tabs
     document.addEventListener('DOMContentLoaded', () => {
-      [ultravioletTab, rammerheadTab, atfTab].forEach(tab => tab.classList.remove('active'));
+      [ultravioletTab, rammerheadTab, emeraldTab].forEach(tab => tab.classList.remove('active'));
     });
   </script>
 </body>
