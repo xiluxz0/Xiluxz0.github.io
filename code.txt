@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google</title>
+  <link rel="icon" href="https://www.google.com/favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* (Existing CSS remains unchanged) */
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: #F2ECE6;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #6a0dad, #8a2be2);
+      z-index: -1;
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    body.rammerhead::before {
+      opacity: 0;
+    }
+
+    .tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 1;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 20px 40px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 24px;
+      color: #fff;
+      transition: background-color 0.3s ease, border 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      margin: 0 10px;
+    }
+
+    .tab:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab.active {
+      border: 2px solid #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    #static-paragraph {
+      margin: 20px;
+      text-align: center;
+      color: #fff;
+      font-size: 16px;
+      max-width: 600px;
+      z-index: 1;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 1;
+    }
+
+    #static-paragraph p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    #iframe-container {
+      position: fixed; /* Changed from flex to fixed positioning */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+      border-radius: 0; /* Removed rounded corners */
+      overflow: hidden;
+      display: none;
+      z-index: 1;
+      margin: 0; /* Removed margin */
+      border: none; /* Ensure no borders */
+    }
+    
+    body.tabs-hidden #iframe-container {
+      display: block;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="tabs">
+    <div id="ultraviolet-tab" class="tab">UltraViolet</div>
+    <div id="rammerhead-tab" class="tab">RammerHead</div>
+    <div id="emerald-tab" class="tab">Emerald</div>
+  </div>
+  <div id="iframe-container"></div>
+  <div id="static-paragraph">
+    <p>Select a tab to load the corresponding content. UltraViolet has a faster loadtime than RammerHead but is unable to bypass security of higher level sites such at Discord, Instagram, Reddit, ETC. RammerHead provides users with advanced features such as multi-tab and is free of many limitations present while using UltraViolet.</p>
+  </div>
+
+  <script>
+    // Get elements
+    const ultravioletTab = document.getElementById('ultraviolet-tab');
+    const rammerheadTab = document.getElementById('rammerhead-tab');
+    const emeraldTab = document.getElementById('emerald-tab');
+    const iframeContainer = document.getElementById('iframe-container');
+    const tabsContainer = document.querySelector('.tabs');
+    const body = document.body;
+    const staticParagraph = document.getElementById('static-paragraph');
+
+    // Updated URLs with Emerald
+    const urls = {
+      ultraviolet: "https://zentkhub-7e9aed.koyeb.app",
+      rammerhead: "https://onthe.wildsurf.net",
+      emerald: "https://portal.fots.org.np"
+    };
+
+    // Existing loadIframe and hideElements functions remain unchanged
+    function loadIframe(url) {
+      iframeContainer.style.opacity = "0";
+      setTimeout(() => {
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
+        iframeContainer.innerHTML = "";
+        iframeContainer.appendChild(iframe);
+        iframeContainer.style.opacity = "1";
+      }, 300);
+    }
+
+    function hideElements() {
+      staticParagraph.style.opacity = "0";
+      tabsContainer.style.opacity = "0";
+      setTimeout(() => {
+        tabsContainer.style.display = "none"; 
+        staticParagraph.style.display = "none"; 
+        iframeContainer.style.display = "block";
+      }, 500);
+    }
+
+    // Updated switchTab function
+    function switchTab(selected) {
+      // Reset all tabs
+      [ultravioletTab, rammerheadTab, emeraldTab].forEach(tab => tab.classList.remove('active'));
+
+      // Set active tab and load content
+      if (selected === 'ultraviolet') {
+        ultravioletTab.classList.add('active');
+        loadIframe(urls.ultraviolet);
+        body.classList.remove('rammerhead');
+      } else if (selected === 'rammerhead') {
+        rammerheadTab.classList.add('active');
+        loadIframe(urls.rammerhead);
+        body.classList.add('rammerhead');
+      } else if (selected === 'emerald') {
+        emeraldTab.classList.add('active');
+        loadIframe(urls.emerald);
+        body.classList.remove('rammerhead');
+      }
+
+      hideElements();
+    }
+
+    // Add event listeners for all tabs
+    ultravioletTab.addEventListener('click', () => switchTab('ultraviolet'));
+    rammerheadTab.addEventListener('click', () => switchTab('rammerhead'));
+    emeraldTab.addEventListener('click', () => switchTab('emerald'));
+
+    // Initialize tabs
+    document.addEventListener('DOMContentLoaded', () => {
+      [ultravioletTab, rammerheadTab, emeraldTab].forEach(tab => tab.classList.remove('active'));
+    });
+  </script>
+</body>
+</html>
